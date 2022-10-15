@@ -1,4 +1,4 @@
-package com.wezaam.withdrawal.response;
+package com.wezaam.withdrawal.dto;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -8,9 +8,9 @@ import java.util.List;
 
 @Getter
 @Builder
-public class UserResponse {
+public class UserDto {
     private Long id;
     private String firstName;
     private BigDecimal maxWithdrawalAmount;
-    private List<PaymentMethodResponse> paymentMethods;
+    private List<PaymentMethodDto> paymentMethods;
 }

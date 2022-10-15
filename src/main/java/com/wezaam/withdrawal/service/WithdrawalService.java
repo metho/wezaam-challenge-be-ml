@@ -1,23 +1,30 @@
 package com.wezaam.withdrawal.service;
 
 import com.wezaam.withdrawal.exception.TransactionException;
+import com.wezaam.withdrawal.mapper.WithdrawalMapper;
 import com.wezaam.withdrawal.model.PaymentMethod;
 import com.wezaam.withdrawal.model.Withdrawal;
-import com.wezaam.withdrawal.model.WithdrawalScheduled;
+import com.wezaam.withdrawal.model.ScheduledWithdrawal;
 import com.wezaam.withdrawal.model.WithdrawalStatus;
 import com.wezaam.withdrawal.repository.PaymentMethodRepository;
 import com.wezaam.withdrawal.repository.WithdrawalRepository;
 import com.wezaam.withdrawal.repository.WithdrawalScheduledRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.wezaam.withdrawal.dto.WithdrawalDto;
+import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
+@RequiredArgsConstructor
 public class WithdrawalService {
 
     private final WithdrawalRepository withdrawalRepository;
@@ -27,12 +34,10 @@ public class WithdrawalService {
     private final EventsService eventsService;
     private final ExecutorService executorService = Executors.newCachedThreadPool();
 
-    public WithdrawalService(WithdrawalRepository withdrawalRepository, WithdrawalScheduledRepository withdrawalScheduledRepository, WithdrawalProcessingService withdrawalProcessingService, PaymentMethodRepository paymentMethodRepository, EventsService eventsService) {
-        this.withdrawalRepository = withdrawalRepository;
-        this.withdrawalScheduledRepository = withdrawalScheduledRepository;
-        this.withdrawalProcessingService = withdrawalProcessingService;
-        this.paymentMethodRepository = paymentMethodRepository;
-        this.eventsService = eventsService;
+    public List<WithdrawalDto> findAllWithdrawals() {
+        List<WithdrawalDto> immediateWithdrawals = WithdrawalMapper.mapWithdrawal(withdrawalRepository.findAll());
+        List<WithdrawalDto> scheduledWithdrawals = WithdrawalMapper.mapScheduledWithdrawal(withdrawalScheduledRepository.findAll());
+        return Stream.concat(immediateWithdrawals.stream(), scheduledWithdrawals.stream()).collect(Collectors.toList());
     }
 
     public void create(Withdrawal withdrawal) {
@@ -69,8 +74,8 @@ public class WithdrawalService {
         });
     }
 
-    public void schedule(WithdrawalScheduled withdrawalScheduled) {
-        withdrawalScheduledRepository.save(withdrawalScheduled);
+    public void schedule(ScheduledWithdrawal scheduledWithdrawal) {
+        withdrawalScheduledRepository.save(scheduledWithdrawal);
     }
 
     @Scheduled(fixedDelay = 5000)
@@ -79,7 +84,7 @@ public class WithdrawalService {
                 .forEach(this::processScheduled);
     }
 
-    private void processScheduled(WithdrawalScheduled withdrawal) {
+    private void processScheduled(ScheduledWithdrawal withdrawal) {
         PaymentMethod paymentMethod = paymentMethodRepository.findById(withdrawal.getPaymentMethodId()).orElse(null);
         if (paymentMethod != null) {
             try {
@@ -99,4 +104,5 @@ public class WithdrawalService {
             }
         }
     }
+
 }

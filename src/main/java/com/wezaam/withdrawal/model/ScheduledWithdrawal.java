@@ -11,7 +11,7 @@ import java.time.Instant;
 import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity(name = "scheduled_withdrawals")
-public class WithdrawalScheduled {
+public class ScheduledWithdrawal {
 
     @Id
     @GeneratedValue(strategy = IDENTITY)

@@ -1,11 +1,11 @@
-package com.wezaam.withdrawal.response;
+package com.wezaam.withdrawal.dto;
 
 import lombok.Builder;
 import lombok.Getter;
 
 @Getter
 @Builder
-public class PaymentMethodResponse {
+public class PaymentMethodDto {
     private Long id;
     private String name;
 }

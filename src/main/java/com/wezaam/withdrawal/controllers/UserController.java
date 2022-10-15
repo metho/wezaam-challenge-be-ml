@@ -1,6 +1,6 @@
 package com.wezaam.withdrawal.controllers;
 
-import com.wezaam.withdrawal.response.UserResponse;
+import com.wezaam.withdrawal.dto.UserDto;
 import com.wezaam.withdrawal.service.UserService;
 import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
@@ -18,12 +18,12 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping("/users")
-    public List<UserResponse> findAll() {
+    public List<UserDto> findAll() {
         return userService.findAllUsers();
     }
 
     @GetMapping("/users/{id}")
-    public UserResponse findById(@PathVariable Long id) {
+    public UserDto findById(@PathVariable Long id) {
         return userService.findUserById(id);
     }
 }

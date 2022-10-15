@@ -1,12 +1,12 @@
 package com.wezaam.withdrawal.repository;
 
-import com.wezaam.withdrawal.model.WithdrawalScheduled;
+import com.wezaam.withdrawal.model.ScheduledWithdrawal;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.time.Instant;
 import java.util.List;
 
-public interface WithdrawalScheduledRepository extends JpaRepository<WithdrawalScheduled, Long> {
+public interface WithdrawalScheduledRepository extends JpaRepository<ScheduledWithdrawal, Long> {
 
-    List<WithdrawalScheduled> findAllByExecuteAtBefore(Instant date);
+    List<ScheduledWithdrawal> findAllByExecuteAtBefore(Instant date);
 }
