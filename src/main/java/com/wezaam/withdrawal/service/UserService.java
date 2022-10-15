@@ -1,7 +1,7 @@
 package com.wezaam.withdrawal.service;
 
 import com.wezaam.withdrawal.exception.UserNotFoundException;
-import com.wezaam.withdrawal.mappers.UserMapper;
+import com.wezaam.withdrawal.mapper.UserMapper;
 import com.wezaam.withdrawal.repository.UserRepository;
 import com.wezaam.withdrawal.response.UserResponse;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +20,6 @@ public class UserService {
     }
 
     public UserResponse findUserById(Long id) {
-        return UserMapper.mapToUserResponse(userRepository.findById(id).orElseThrow(UserNotFoundException::new));
+        return UserMapper.mapToUserResponse(userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id)));
     }
 }

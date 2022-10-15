@@ -1,4 +1,4 @@
-package com.wezaam.withdrawal.mappers;
+package com.wezaam.withdrawal.mapper;
 
 import com.wezaam.withdrawal.model.User;
 import com.wezaam.withdrawal.response.UserResponse;
