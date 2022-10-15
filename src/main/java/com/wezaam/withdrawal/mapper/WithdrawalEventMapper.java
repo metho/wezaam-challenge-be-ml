@@ -1,8 +1,8 @@
 package com.wezaam.withdrawal.mapper;
 
 import com.wezaam.withdrawal.dto.WithdrawalType;
-import com.wezaam.withdrawal.events.ScheduledWithdrawalEvent;
-import com.wezaam.withdrawal.events.WithdrawalEvent;
+import com.wezaam.withdrawal.event.ScheduledWithdrawalEvent;
+import com.wezaam.withdrawal.event.WithdrawalEvent;
 import com.wezaam.withdrawal.model.ScheduledWithdrawal;
 import com.wezaam.withdrawal.model.Withdrawal;
 import lombok.experimental.UtilityClass;

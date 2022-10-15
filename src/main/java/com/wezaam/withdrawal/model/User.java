@@ -1,5 +1,8 @@
 package com.wezaam.withdrawal.model;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -10,6 +13,8 @@ import java.util.List;
 import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity(name = "users")
+@Getter
+@Setter
 public class User {
 
     @Id
@@ -20,35 +25,4 @@ public class User {
     private List<PaymentMethod> paymentMethods;
     private BigDecimal maxWithdrawalAmount;
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public List<PaymentMethod> getPaymentMethods() {
-        return paymentMethods;
-    }
-
-    public void setPaymentMethods(List<PaymentMethod> paymentMethods) {
-        this.paymentMethods = paymentMethods;
-    }
-
-    public BigDecimal getMaxWithdrawalAmount() {
-        return maxWithdrawalAmount;
-    }
-
-    public void setMaxWithdrawalAmount(BigDecimal maxWithdrawalAmount) {
-        this.maxWithdrawalAmount = maxWithdrawalAmount;
-    }
 }

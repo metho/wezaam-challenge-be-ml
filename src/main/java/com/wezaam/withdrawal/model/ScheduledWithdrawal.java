@@ -1,5 +1,8 @@
 package com.wezaam.withdrawal.model;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -11,6 +14,8 @@ import java.time.Instant;
 import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity(name = "scheduled_withdrawals")
+@Getter
+@Setter
 public class ScheduledWithdrawal {
 
     @Id
@@ -25,67 +30,4 @@ public class ScheduledWithdrawal {
     @Enumerated(EnumType.STRING)
     private WithdrawalStatus status;
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public BigDecimal getAmount() {
-        return amount;
-    }
-
-    public void setAmount(BigDecimal amount) {
-        this.amount = amount;
-    }
-
-    public Instant getExecuteAt() {
-        return executeAt;
-    }
-
-    public void setExecuteAt(Instant executeAt) {
-        this.executeAt = executeAt;
-    }
-
-    public Long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
-
-    public Long getPaymentMethodId() {
-        return paymentMethodId;
-    }
-
-    public void setPaymentMethodId(Long paymentMethodId) {
-        this.paymentMethodId = paymentMethodId;
-    }
-
-    public WithdrawalStatus getStatus() {
-        return status;
-    }
-
-    public void setStatus(WithdrawalStatus status) {
-        this.status = status;
-    }
-
-    public Instant getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(Instant createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public void setTransactionId(Long transactionId) {
-        this.transactionId = transactionId;
-    }
-
-    public Long getTransactionId() {
-        return transactionId;
-    }
 }

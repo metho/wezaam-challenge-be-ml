@@ -1,9 +1,7 @@
 package com.wezaam.withdrawal.service;
 
-import com.wezaam.withdrawal.events.ScheduledWithdrawalEvent;
-import com.wezaam.withdrawal.events.WithdrawalEvent;
-import com.wezaam.withdrawal.model.Withdrawal;
-import com.wezaam.withdrawal.model.ScheduledWithdrawal;
+import com.wezaam.withdrawal.event.ScheduledWithdrawalEvent;
+import com.wezaam.withdrawal.event.WithdrawalEvent;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 

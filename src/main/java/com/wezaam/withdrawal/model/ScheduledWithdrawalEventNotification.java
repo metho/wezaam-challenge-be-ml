@@ -4,29 +4,24 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import java.math.BigDecimal;
+import javax.persistence.OneToOne;
+
 import java.time.Instant;
 
 import static javax.persistence.GenerationType.IDENTITY;
 
-@Entity(name = "withdrawals")
+@Entity(name = "scheduled_withdrawal_event_notification")
 @Getter
 @Setter
-public class Withdrawal {
-
+public class ScheduledWithdrawalEventNotification {
     @Id
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
-    private Long transactionId;
-    private BigDecimal amount;
+    private WithdrawalEventStatus withdrawalEventStatus;
     private Instant createdAt;
-    private Long userId;
-    private Long paymentMethodId;
-    @Enumerated(EnumType.STRING)
-    private WithdrawalStatus status;
+    @OneToOne
+    private ScheduledWithdrawal scheduledWithdrawal;
 
 }

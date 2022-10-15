@@ -1,4 +1,4 @@
-package com.wezaam.withdrawal.events;
+package com.wezaam.withdrawal.event;
 
 import com.wezaam.withdrawal.dto.WithdrawalType;
 import com.wezaam.withdrawal.model.WithdrawalStatus;
