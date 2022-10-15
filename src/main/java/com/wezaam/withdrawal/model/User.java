@@ -4,6 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import java.math.BigDecimal;
 import java.util.List;
 
 import static javax.persistence.GenerationType.IDENTITY;
@@ -17,7 +18,7 @@ public class User {
     private String firstName;
     @OneToMany(mappedBy="user")
     private List<PaymentMethod> paymentMethods;
-    private Double maxWithdrawalAmount;
+    private BigDecimal maxWithdrawalAmount;
 
     public Long getId() {
         return id;
@@ -43,11 +44,11 @@ public class User {
         this.paymentMethods = paymentMethods;
     }
 
-    public Double getMaxWithdrawalAmount() {
+    public BigDecimal getMaxWithdrawalAmount() {
         return maxWithdrawalAmount;
     }
 
-    public void setMaxWithdrawalAmount(Double maxWithdrawalAmount) {
+    public void setMaxWithdrawalAmount(BigDecimal maxWithdrawalAmount) {
         this.maxWithdrawalAmount = maxWithdrawalAmount;
     }
 }

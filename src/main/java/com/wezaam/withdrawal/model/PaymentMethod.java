@@ -1,7 +1,5 @@
 package com.wezaam.withdrawal.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -16,7 +14,6 @@ public class PaymentMethod {
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
     @ManyToOne
-    @JsonIgnore
     private User user;
     private String name;
 

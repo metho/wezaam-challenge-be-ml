@@ -1,4 +1,4 @@
-package com.wezaam.withdrawal.rest;
+package com.wezaam.withdrawal.controllers;
 
 import com.wezaam.withdrawal.model.Withdrawal;
 import com.wezaam.withdrawal.model.WithdrawalScheduled;
@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
@@ -54,7 +55,7 @@ public class WithdrawalController {
             Withdrawal withdrawal = new Withdrawal();
             withdrawal.setUserId(Long.parseLong(userId));
             withdrawal.setPaymentMethodId(Long.parseLong(paymentMethodId));
-            withdrawal.setAmount(Double.parseDouble(amount));
+            withdrawal.setAmount(new BigDecimal(amount));
             withdrawal.setCreatedAt(Instant.now());
             withdrawal.setStatus(WithdrawalStatus.PENDING);
             withdrawalService.create(withdrawal);
@@ -63,7 +64,7 @@ public class WithdrawalController {
             WithdrawalScheduled withdrawalScheduled = new WithdrawalScheduled();
             withdrawalScheduled.setUserId(Long.parseLong(userId));
             withdrawalScheduled.setPaymentMethodId(Long.parseLong(paymentMethodId));
-            withdrawalScheduled.setAmount(Double.parseDouble(amount));
+            withdrawalScheduled.setAmount(new BigDecimal(amount));
             withdrawalScheduled.setCreatedAt(Instant.now());
             withdrawalScheduled.setExecuteAt(Instant.parse(executeAt));
             withdrawalScheduled.setStatus(WithdrawalStatus.PENDING);

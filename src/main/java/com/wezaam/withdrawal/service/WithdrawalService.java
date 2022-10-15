@@ -20,18 +20,20 @@ import java.util.concurrent.Executors;
 @Service
 public class WithdrawalService {
 
-    @Autowired
-    private WithdrawalRepository withdrawalRepository;
-    @Autowired
-    private WithdrawalScheduledRepository withdrawalScheduledRepository;
-    @Autowired
-    private WithdrawalProcessingService withdrawalProcessingService;
-    @Autowired
-    private PaymentMethodRepository paymentMethodRepository;
-    @Autowired
-    private EventsService eventsService;
-
+    private final WithdrawalRepository withdrawalRepository;
+    private final WithdrawalScheduledRepository withdrawalScheduledRepository;
+    private final WithdrawalProcessingService withdrawalProcessingService;
+    private final PaymentMethodRepository paymentMethodRepository;
+    private final EventsService eventsService;
     private final ExecutorService executorService = Executors.newCachedThreadPool();
+
+    public WithdrawalService(WithdrawalRepository withdrawalRepository, WithdrawalScheduledRepository withdrawalScheduledRepository, WithdrawalProcessingService withdrawalProcessingService, PaymentMethodRepository paymentMethodRepository, EventsService eventsService) {
+        this.withdrawalRepository = withdrawalRepository;
+        this.withdrawalScheduledRepository = withdrawalScheduledRepository;
+        this.withdrawalProcessingService = withdrawalProcessingService;
+        this.paymentMethodRepository = paymentMethodRepository;
+        this.eventsService = eventsService;
+    }
 
     public void create(Withdrawal withdrawal) {
         Withdrawal pendingWithdrawal = withdrawalRepository.save(withdrawal);
@@ -57,13 +59,11 @@ public class WithdrawalService {
                 } catch (Exception e) {
                     if (e instanceof TransactionException) {
                         savedWithdrawal.setStatus(WithdrawalStatus.FAILED);
-                        withdrawalRepository.save(savedWithdrawal);
-                        eventsService.send(savedWithdrawal);
                     } else {
                         savedWithdrawal.setStatus(WithdrawalStatus.INTERNAL_ERROR);
-                        withdrawalRepository.save(savedWithdrawal);
-                        eventsService.send(savedWithdrawal);
                     }
+                    withdrawalRepository.save(savedWithdrawal);
+                    eventsService.send(savedWithdrawal);
                 }
             }
         });
@@ -91,13 +91,11 @@ public class WithdrawalService {
             } catch (Exception e) {
                 if (e instanceof TransactionException) {
                     withdrawal.setStatus(WithdrawalStatus.FAILED);
-                    withdrawalScheduledRepository.save(withdrawal);
-                    eventsService.send(withdrawal);
                 } else {
                     withdrawal.setStatus(WithdrawalStatus.INTERNAL_ERROR);
-                    withdrawalScheduledRepository.save(withdrawal);
-                    eventsService.send(withdrawal);
                 }
+                withdrawalScheduledRepository.save(withdrawal);
+                eventsService.send(withdrawal);
             }
         }
     }

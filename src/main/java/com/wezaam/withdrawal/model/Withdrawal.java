@@ -5,6 +5,7 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import java.math.BigDecimal;
 import java.time.Instant;
 
 import static javax.persistence.GenerationType.IDENTITY;
@@ -16,7 +17,7 @@ public class Withdrawal {
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
     private Long transactionId;
-    private Double amount;
+    private BigDecimal amount;
     private Instant createdAt;
     private Long userId;
     private Long paymentMethodId;
@@ -31,11 +32,11 @@ public class Withdrawal {
         this.id = id;
     }
 
-    public Double getAmount() {
+    public BigDecimal getAmount() {
         return amount;
     }
 
-    public void setAmount(Double amount) {
+    public void setAmount(BigDecimal amount) {
         this.amount = amount;
     }
 
