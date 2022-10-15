@@ -1,10 +1,8 @@
 package com.wezaam.withdrawal.exception;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+public class UserNotFoundException extends EntityNotFoundException {
+    public UserNotFoundException(long id) {
+        super(id, "user");
+    }
 
-@Getter
-@RequiredArgsConstructor
-public class UserNotFoundException extends RuntimeException {
-    private final Long id;
 }

@@ -19,7 +19,11 @@ public class UserService {
         return UserMapper.mapToUserResponses(userRepository.findAll());
     }
 
-    public UserDto findUserById(Long id) {
+    public UserDto findUserById(long id) {
         return UserMapper.mapToUserResponse(userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id)));
+    }
+
+    public boolean userExists(long id) {
+        return userRepository.existsById(id);
     }
 }
