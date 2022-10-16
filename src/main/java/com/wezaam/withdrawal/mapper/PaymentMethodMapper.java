@@ -10,11 +10,11 @@ import java.util.stream.Collectors;
 @UtilityClass
 public class PaymentMethodMapper {
 
-    public List<PaymentMethodDto> mapPaymentMethods(List<PaymentMethod> paymentMethods) {
-        return paymentMethods.stream().map(PaymentMethodMapper::mapPaymentMethod).collect(Collectors.toList());
+    public List<PaymentMethodDto> mapToPaymentMethodDtos(List<PaymentMethod> paymentMethods) {
+        return paymentMethods.stream().map(PaymentMethodMapper::mapToPaymentMethodDto).collect(Collectors.toList());
     }
 
-    public PaymentMethodDto mapPaymentMethod(PaymentMethod paymentMethod) {
+    public PaymentMethodDto mapToPaymentMethodDto(PaymentMethod paymentMethod) {
         return PaymentMethodDto.builder()
                 .id(paymentMethod.getId())
                 .name(paymentMethod.getName())

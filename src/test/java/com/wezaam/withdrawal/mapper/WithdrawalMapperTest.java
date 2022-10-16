@@ -6,6 +6,7 @@ import com.wezaam.withdrawal.dto.WithdrawalStatusDto;
 import com.wezaam.withdrawal.model.Withdrawal;
 import com.wezaam.withdrawal.model.WithdrawalStatus;
 import com.wezaam.withdrawal.model.WithdrawalType;
+import com.wezaam.withdrawal.request.WithdrawalRequest;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
@@ -31,7 +32,7 @@ class WithdrawalMapperTest {
         withdrawal.setPaymentMethodId(5L);
 
         //when
-        WithdrawalDto withdrawalDto = WithdrawalMapper.mapWithdrawal(withdrawal);
+        WithdrawalDto withdrawalDto = WithdrawalMapper.mapToWithdrawalDtos(withdrawal);
 
         //then
         assertEquals(1L, withdrawalDto.getId());
@@ -42,6 +43,28 @@ class WithdrawalMapperTest {
         assertEquals(WithdrawalTypeDto.SCHEDULED, withdrawalDto.getWithdrawalTypeDto());
         assertEquals(1234L, withdrawalDto.getTransactionId());
         assertEquals(5L, withdrawalDto.getPaymentMethodId());
+    }
+
+    @Test
+    void shouldMapWithdrawalRequestToEntity() {
+        //given
+        WithdrawalRequest withdrawalRequest = new WithdrawalRequest();
+        withdrawalRequest.setAmount(BigDecimal.TEN);
+        Instant executeAt = Instant.now();
+        withdrawalRequest.setExecuteAt(executeAt);
+        withdrawalRequest.setPaymentMethodId(5L);
+        withdrawalRequest.setWithdrawalTypeDto(WithdrawalTypeDto.SCHEDULED);
+
+        //when
+        Withdrawal withdrawal = WithdrawalMapper.mapToWithdrawal(withdrawalRequest);
+
+        //then
+        assertEquals(BigDecimal.TEN, withdrawal.getAmount());
+        assertEquals(executeAt, withdrawal.getExecuteAt());
+        assertNotNull(withdrawal.getCreatedAt());
+        assertEquals(5L, withdrawal.getPaymentMethodId());
+        assertEquals(WithdrawalStatus.PENDING, withdrawal.getStatus());
+        assertEquals(WithdrawalType.SCHEDULED, withdrawal.getWithdrawalType());
     }
 
 }

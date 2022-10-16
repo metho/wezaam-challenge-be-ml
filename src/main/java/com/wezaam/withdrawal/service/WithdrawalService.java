@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -39,50 +40,43 @@ public class WithdrawalService {
     private final ExecutorService executorService = Executors.newCachedThreadPool();
 
     public List<WithdrawalDto> findAllWithdrawals() {
-        return WithdrawalMapper.mapWithdrawal(withdrawalRepository.findAll());
+        return WithdrawalMapper.mapToWithdrawalDtos(withdrawalRepository.findAll());
     }
 
     public WithdrawalDto createWithdrawal(WithdrawalRequest withdrawalRequest) {
-        if (!userRepository.existsById(withdrawalRequest.getUserId())) {
-            throw new UserNotFoundException(withdrawalRequest.getUserId());
-        }
+        validateUserExists(withdrawalRequest.getUserId());
+        PaymentMethod paymentMethod = findPaymentMethod(withdrawalRequest.getPaymentMethodId());
+        validatePaymentMethodBelongsToTheUser(withdrawalRequest.getUserId(), paymentMethod);
 
-        long paymentMethodId = withdrawalRequest.getPaymentMethodId();
-        PaymentMethod paymentMethod = paymentMethodRepository.findById(paymentMethodId)
-                .orElseThrow(() -> new PaymentNotFoundException(paymentMethodId));
-
-        validatePaymentMethodBelongsToTheUser(withdrawalRequest, paymentMethod);
-
-        Withdrawal withdrawal = buildWithdrawal(withdrawalRequest, paymentMethod.getId());
+        Withdrawal withdrawal = WithdrawalMapper.mapToWithdrawal(withdrawalRequest);
         if (withdrawalRequest.getWithdrawalTypeDto() == WithdrawalTypeDto.IMMEDIATE) {
             this.create(withdrawal, paymentMethod);
         } else {
             this.schedule(withdrawal);
         }
-        return WithdrawalMapper.mapWithdrawal(withdrawal);
+        return WithdrawalMapper.mapToWithdrawalDtos(withdrawal);
     }
 
-    private static void validatePaymentMethodBelongsToTheUser(WithdrawalRequest withdrawalRequest, PaymentMethod paymentMethod) {
-        if (withdrawalRequest.getUserId() != paymentMethod.getUser().getId()) {
-            throw new PaymentMethodBelongsToDifferentUserException(paymentMethod.getId(), withdrawalRequest.getUserId(),
+    private PaymentMethod findPaymentMethod(long paymentMethodId) {
+        return paymentMethodRepository.findById(paymentMethodId)
+                .orElseThrow(() -> new PaymentNotFoundException(paymentMethodId));
+    }
+
+    private void validateUserExists(long userId) {
+        if (!userRepository.existsById(userId)) {
+            throw new UserNotFoundException(userId);
+        }
+    }
+
+    private static void validatePaymentMethodBelongsToTheUser(long userId, PaymentMethod paymentMethod) {
+        if (userId != paymentMethod.getUser().getId()) {
+            throw new PaymentMethodBelongsToDifferentUserException(paymentMethod.getId(), userId,
                     paymentMethod.getUser().getId());
         }
     }
 
     public void schedule(Withdrawal scheduledWithdrawal) {
         withdrawalRepository.save(scheduledWithdrawal);
-    }
-
-    private static Withdrawal buildWithdrawal(WithdrawalRequest withdrawalRequest, long paymentMethodId) {
-        Withdrawal withdrawal = new Withdrawal();
-        withdrawal.setUserId(withdrawalRequest.getUserId());
-        withdrawal.setPaymentMethodId(paymentMethodId);
-        withdrawal.setAmount(withdrawalRequest.getAmount());
-        withdrawal.setCreatedAt(Instant.now());
-        withdrawal.setStatus(WithdrawalStatus.PENDING);
-        withdrawal.setWithdrawalType(WithdrawalMapper.mapWithdrawalTypeDto(withdrawalRequest.getWithdrawalTypeDto()));
-        withdrawal.setExecuteAt(withdrawalRequest.getExecuteAt());
-        return withdrawal;
     }
 
     public void create(Withdrawal withdrawal, PaymentMethod paymentMethod) {
@@ -124,9 +118,9 @@ public class WithdrawalService {
     }
 
     private void processScheduled(Withdrawal withdrawal) {
-        PaymentMethod paymentMethod = paymentMethodRepository.findById(withdrawal.getPaymentMethodId()).orElse(null);
-        if (paymentMethod != null) {
-            processWithdrawal(withdrawal, paymentMethod, withdrawal);
+        Optional<PaymentMethod> paymentMethod = paymentMethodRepository.findById(withdrawal.getPaymentMethodId());
+        if (paymentMethod.isPresent()) {
+            processWithdrawal(withdrawal, paymentMethod.get(), withdrawal);
         } else {
             log.error("Could not find payment method for scheduled withdrawal with id {}. Payment method id: {}",
                     withdrawal.getId(), withdrawal.getPaymentMethodId());

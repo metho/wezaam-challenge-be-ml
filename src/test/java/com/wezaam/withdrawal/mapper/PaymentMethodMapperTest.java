@@ -17,7 +17,7 @@ class PaymentMethodMapperTest {
         paymentMethod.setName("test");
 
         //when
-        PaymentMethodDto paymentMethodDto = PaymentMethodMapper.mapPaymentMethod(paymentMethod);
+        PaymentMethodDto paymentMethodDto = PaymentMethodMapper.mapToPaymentMethodDto(paymentMethod);
 
         //then
         assertEquals(1L, paymentMethodDto.getId());

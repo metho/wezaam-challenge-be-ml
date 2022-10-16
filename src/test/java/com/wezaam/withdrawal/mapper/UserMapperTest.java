@@ -27,7 +27,7 @@ class UserMapperTest {
         user.setPaymentMethods(paymentMethods);
 
         //when
-        UserDto userDto = UserMapper.mapUser(user);
+        UserDto userDto = UserMapper.mapToUserDto(user);
 
         //then
         assertEquals(1L, userDto.getId());

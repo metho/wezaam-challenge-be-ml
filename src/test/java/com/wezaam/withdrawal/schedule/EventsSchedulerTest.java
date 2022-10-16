@@ -25,10 +25,8 @@ class EventsSchedulerTest {
 
     @InjectMocks
     private EventsScheduler eventsScheduler;
-
     @Mock
     private EventsService eventsService;
-
     @Mock
     private WithdrawalEventNotificationRepository withdrawalEventNotificationRepository;
 

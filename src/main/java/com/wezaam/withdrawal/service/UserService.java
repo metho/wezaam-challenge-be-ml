@@ -16,11 +16,11 @@ public class UserService {
     private final UserRepository userRepository;
 
     public List<UserDto> findAllUsers() {
-        return UserMapper.mapUsers(userRepository.findAll());
+        return UserMapper.mapToUserDtos(userRepository.findAll());
     }
 
     public UserDto findUserById(long id) {
-        return UserMapper.mapUser(userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id)));
+        return UserMapper.mapToUserDto(userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id)));
     }
 
     public boolean userExists(long id) {

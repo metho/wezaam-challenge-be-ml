@@ -25,7 +25,7 @@ public class EventsScheduler {
                 .findAllByWithdrawalEventStatusIn(List.of(WithdrawalEventStatus.CREATED, WithdrawalEventStatus.ERROR));
 
         withdrawalEventNotifications.forEach(notification ->
-                eventsService.send(WithdrawalEventMapper.mapWithdrawal(notification.getWithdrawal()))
+                eventsService.send(WithdrawalEventMapper.mapToWithdrawalEvent(notification.getWithdrawal()))
                         .thenAccept(result -> {
                             if (result == EventSendResult.COMPLETED) {
                                 withdrawalEventNotificationRepository.findById(notification.getId())

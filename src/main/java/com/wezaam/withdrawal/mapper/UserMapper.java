@@ -10,16 +10,16 @@ import java.util.stream.Collectors;
 @UtilityClass
 public class UserMapper {
 
-    public List<UserDto> mapUsers(List<User> users) {
-        return users.stream().map(UserMapper::mapUser).collect(Collectors.toList());
+    public List<UserDto> mapToUserDtos(List<User> users) {
+        return users.stream().map(UserMapper::mapToUserDto).collect(Collectors.toList());
     }
 
-    public UserDto mapUser(User user) {
+    public UserDto mapToUserDto(User user) {
         return UserDto.builder()
                 .id(user.getId())
                 .firstName(user.getFirstName())
                 .maxWithdrawalAmount(user.getMaxWithdrawalAmount())
-                .paymentMethods(PaymentMethodMapper.mapPaymentMethods(user.getPaymentMethods()))
+                .paymentMethods(PaymentMethodMapper.mapToPaymentMethodDtos(user.getPaymentMethods()))
                 .build();
     }
 }

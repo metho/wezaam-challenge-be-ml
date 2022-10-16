@@ -31,7 +31,7 @@ class WithdrawalEventMapperTest {
         withdrawal.setPaymentMethodId(5L);
 
         //when
-        WithdrawalEvent withdrawalEvent = WithdrawalEventMapper.mapWithdrawal(withdrawal);
+        WithdrawalEvent withdrawalEvent = WithdrawalEventMapper.mapToWithdrawalEvent(withdrawal);
 
         //then
         assertEquals(1L, withdrawalEvent.getId());
