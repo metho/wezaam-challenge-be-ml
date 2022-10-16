@@ -1,0 +1,8 @@
+version: '2'
+services:
+  wezaam-challenge-server:
+    container_name: wezaam-challenge
+    build: .
+    image: wezaam-challenge:latest
+    ports:
+      - "7070:7070"
