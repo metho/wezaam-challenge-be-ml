@@ -7,4 +7,4 @@
 
 ### Basic information:
 - Swagger UI is located by default at: http://localhost:7070/swagger-ui/index.html
-- You can run it from maven using `mvn spring-boot:run`
+- You can run it locally from maven using `mvn spring-boot:run` or run it as docker container using `docker-compose up --build`
