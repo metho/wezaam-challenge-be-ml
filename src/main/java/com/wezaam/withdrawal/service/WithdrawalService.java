@@ -75,32 +75,30 @@ public class WithdrawalService {
         }
     }
 
-    public void schedule(Withdrawal scheduledWithdrawal) {
+    private void schedule(Withdrawal scheduledWithdrawal) {
         withdrawalRepository.save(scheduledWithdrawal);
     }
 
     public void create(Withdrawal withdrawal, PaymentMethod paymentMethod) {
         Withdrawal savedWithdrawal = withdrawalRepository.save(withdrawal);
-        executorService.submit(() -> {
-            processWithdrawal(withdrawal, paymentMethod, savedWithdrawal);
-        });
+        executorService.submit(() -> processWithdrawal(paymentMethod, savedWithdrawal));
     }
 
-    private void processWithdrawal(Withdrawal withdrawal, PaymentMethod paymentMethod, Withdrawal savedWithdrawal) {
+    public void processWithdrawal(PaymentMethod paymentMethod, Withdrawal withdrawal) {
         try {
             var transactionId = withdrawalProcessingService.sendToProcessing(withdrawal.getAmount(), paymentMethod);
-            savedWithdrawal.setStatus(WithdrawalStatus.PROCESSING);
-            savedWithdrawal.setTransactionId(transactionId);
+            withdrawal.setStatus(WithdrawalStatus.PROCESSING);
+            withdrawal.setTransactionId(transactionId);
         } catch (Exception e) {
             if (e instanceof TransactionException) {
-                savedWithdrawal.setStatus(WithdrawalStatus.FAILED);
+                withdrawal.setStatus(WithdrawalStatus.FAILED);
             } else {
-                savedWithdrawal.setStatus(WithdrawalStatus.INTERNAL_ERROR);
+                withdrawal.setStatus(WithdrawalStatus.INTERNAL_ERROR);
             }
         }
-        WithdrawalEventNotification withdrawalEventNotification = buildWithdrawalEventNotification(savedWithdrawal);
+        WithdrawalEventNotification withdrawalEventNotification = buildWithdrawalEventNotification(withdrawal);
         withdrawalEventNotificationRepository.save(withdrawalEventNotification);
-        withdrawalRepository.save(savedWithdrawal);
+        withdrawalRepository.save(withdrawal);
     }
 
     private static WithdrawalEventNotification buildWithdrawalEventNotification(Withdrawal withdrawal) {
@@ -120,7 +118,7 @@ public class WithdrawalService {
     private void processScheduled(Withdrawal withdrawal) {
         Optional<PaymentMethod> paymentMethod = paymentMethodRepository.findById(withdrawal.getPaymentMethodId());
         if (paymentMethod.isPresent()) {
-            processWithdrawal(withdrawal, paymentMethod.get(), withdrawal);
+            processWithdrawal(paymentMethod.get(), withdrawal);
         } else {
             log.error("Could not find payment method for scheduled withdrawal with id {}. Payment method id: {}",
                     withdrawal.getId(), withdrawal.getPaymentMethodId());
