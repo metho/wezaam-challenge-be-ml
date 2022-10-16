@@ -24,9 +24,12 @@ public class Withdrawal {
     private Long transactionId;
     private BigDecimal amount;
     private Instant createdAt;
+    private Instant executeAt;
     private Long userId;
     private Long paymentMethodId;
     @Enumerated(EnumType.STRING)
     private WithdrawalStatus status;
+    @Enumerated(EnumType.STRING)
+    private WithdrawalType withdrawalType;
 
 }

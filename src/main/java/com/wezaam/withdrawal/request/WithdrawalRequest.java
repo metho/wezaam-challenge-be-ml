@@ -1,6 +1,6 @@
 package com.wezaam.withdrawal.request;
 
-import com.wezaam.withdrawal.dto.WithdrawalType;
+import com.wezaam.withdrawal.dto.WithdrawalTypeDto;
 import lombok.Data;
 
 import javax.validation.constraints.NotNull;
@@ -15,7 +15,7 @@ public class WithdrawalRequest {
     @NotNull
     private BigDecimal amount;
     @NotNull
-    private WithdrawalType withdrawalType;
+    private WithdrawalTypeDto withdrawalTypeDto;
     @NotNull
     private Instant executeAt;
 }

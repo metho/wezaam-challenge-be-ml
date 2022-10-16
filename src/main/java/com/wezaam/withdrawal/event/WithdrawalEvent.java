@@ -1,6 +1,6 @@
 package com.wezaam.withdrawal.event;
 
-import com.wezaam.withdrawal.dto.WithdrawalType;
+import com.wezaam.withdrawal.dto.WithdrawalTypeDto;
 import com.wezaam.withdrawal.model.WithdrawalStatus;
 import lombok.Builder;
 import lombok.Getter;
@@ -22,5 +22,5 @@ public class WithdrawalEvent {
     private Long paymentMethodId;
     @Enumerated(EnumType.STRING)
     private WithdrawalStatus status;
-    private WithdrawalType withdrawalType;
+    private WithdrawalTypeDto withdrawalTypeDto;
 }

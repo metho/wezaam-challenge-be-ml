@@ -21,5 +21,5 @@ public class WithdrawalDto {
     private Long paymentMethodId;
     @Enumerated(EnumType.STRING)
     private WithdrawalStatus status;
-    private WithdrawalType withdrawalType;
+    private WithdrawalTypeDto withdrawalTypeDto;
 }

@@ -1,6 +1,6 @@
 package com.wezaam.withdrawal.dto;
 
-public enum WithdrawalType {
+public enum WithdrawalTypeDto {
     IMMEDIATE,
     SCHEDULED
 }
