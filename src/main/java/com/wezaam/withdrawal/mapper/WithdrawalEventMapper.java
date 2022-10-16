@@ -20,11 +20,12 @@ public class WithdrawalEventMapper {
                 .id(withdrawal.getId())
                 .transactionId(withdrawal.getTransactionId())
                 .userId(withdrawal.getUserId())
-                .withdrawalTypeDto(WithdrawalTypeDto.IMMEDIATE)
-                .status(withdrawal.getStatus())
+                .withdrawalTypeDto(WithdrawalMapper.mapWithdrawalType(withdrawal.getWithdrawalType()))
+                .status(WithdrawalMapper.mapWithdrawalStatus(withdrawal.getStatus()))
                 .amount(withdrawal.getAmount())
                 .createdAt(withdrawal.getCreatedAt())
                 .paymentMethodId(withdrawal.getPaymentMethodId())
+                .executeAt(withdrawal.getExecuteAt())
                 .build();
     }
 }

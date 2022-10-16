@@ -21,6 +21,6 @@ public class WithdrawalEvent {
     private Long userId;
     private Long paymentMethodId;
     @Enumerated(EnumType.STRING)
-    private WithdrawalStatus status;
+    private WithdrawalStatusDto status;
     private WithdrawalTypeDto withdrawalTypeDto;
 }

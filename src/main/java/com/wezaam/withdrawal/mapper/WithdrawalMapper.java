@@ -2,7 +2,9 @@ package com.wezaam.withdrawal.mapper;
 
 import com.wezaam.withdrawal.dto.WithdrawalDto;
 import com.wezaam.withdrawal.dto.WithdrawalTypeDto;
+import com.wezaam.withdrawal.event.WithdrawalStatusDto;
 import com.wezaam.withdrawal.model.Withdrawal;
+import com.wezaam.withdrawal.model.WithdrawalStatus;
 import com.wezaam.withdrawal.model.WithdrawalType;
 import lombok.experimental.UtilityClass;
 
@@ -46,4 +48,17 @@ public class WithdrawalMapper {
         }
     }
 
+    public static WithdrawalStatusDto mapWithdrawalStatus(WithdrawalStatus withdrawalStatus) {
+        if (withdrawalStatus == WithdrawalStatus.PENDING) {
+            return WithdrawalStatusDto.PENDING;
+        } else if (withdrawalStatus == WithdrawalStatus.FAILED) {
+            return WithdrawalStatusDto.FAILED;
+        } else if (withdrawalStatus == WithdrawalStatus.SUCCESS) {
+            return WithdrawalStatusDto.SUCCESS;
+        } else if (withdrawalStatus == WithdrawalStatus.PROCESSING) {
+            return WithdrawalStatusDto.PROCESSING;
+        } else {
+            return WithdrawalStatusDto.INTERNAL_ERROR;
+        }
+    }
 }
