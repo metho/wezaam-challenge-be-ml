@@ -3,10 +3,7 @@ package com.wezaam.withdrawal.model;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 import java.time.Instant;
 
 import static javax.persistence.GenerationType.IDENTITY;
@@ -18,6 +15,7 @@ public class WithdrawalEventNotification {
     @Id
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
+    @Enumerated(EnumType.STRING)
     private WithdrawalEventStatus withdrawalEventStatus;
     private Instant createdAt;
     @OneToOne

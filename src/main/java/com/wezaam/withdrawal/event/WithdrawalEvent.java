@@ -20,7 +20,6 @@ public class WithdrawalEvent {
     private Instant executeAt;
     private Long userId;
     private Long paymentMethodId;
-    @Enumerated(EnumType.STRING)
     private WithdrawalStatusDto status;
     private WithdrawalTypeDto withdrawalTypeDto;
 }

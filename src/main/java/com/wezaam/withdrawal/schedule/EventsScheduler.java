@@ -31,6 +31,7 @@ public class EventsScheduler {
                                 withdrawalEventNotificationRepository.findById(notification.getId())
                                         .ifPresent(eventNotification -> {
                                             eventNotification.setWithdrawalEventStatus(WithdrawalEventStatus.SENT);
+                                            withdrawalEventNotificationRepository.save(eventNotification);
                                         });
                             }
                         }));
