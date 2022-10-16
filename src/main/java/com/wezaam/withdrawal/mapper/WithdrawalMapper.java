@@ -2,7 +2,7 @@ package com.wezaam.withdrawal.mapper;
 
 import com.wezaam.withdrawal.dto.WithdrawalDto;
 import com.wezaam.withdrawal.dto.WithdrawalTypeDto;
-import com.wezaam.withdrawal.event.WithdrawalStatusDto;
+import com.wezaam.withdrawal.dto.WithdrawalStatusDto;
 import com.wezaam.withdrawal.model.Withdrawal;
 import com.wezaam.withdrawal.model.WithdrawalStatus;
 import com.wezaam.withdrawal.model.WithdrawalType;
@@ -24,7 +24,7 @@ public class WithdrawalMapper {
                 .transactionId(withdrawal.getTransactionId())
                 .userId(withdrawal.getUserId())
                 .withdrawalTypeDto(mapWithdrawalType(withdrawal.getWithdrawalType()))
-                .status(withdrawal.getStatus())
+                .status(WithdrawalMapper.mapWithdrawalStatus(withdrawal.getStatus()))
                 .amount(withdrawal.getAmount())
                 .createdAt(withdrawal.getCreatedAt())
                 .paymentMethodId(withdrawal.getPaymentMethodId())

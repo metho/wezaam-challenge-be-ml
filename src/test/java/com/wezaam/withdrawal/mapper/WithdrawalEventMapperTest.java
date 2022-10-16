@@ -2,7 +2,7 @@ package com.wezaam.withdrawal.mapper;
 
 import com.wezaam.withdrawal.dto.WithdrawalTypeDto;
 import com.wezaam.withdrawal.event.WithdrawalEvent;
-import com.wezaam.withdrawal.event.WithdrawalStatusDto;
+import com.wezaam.withdrawal.dto.WithdrawalStatusDto;
 import com.wezaam.withdrawal.model.Withdrawal;
 import com.wezaam.withdrawal.model.WithdrawalStatus;
 import com.wezaam.withdrawal.model.WithdrawalType;

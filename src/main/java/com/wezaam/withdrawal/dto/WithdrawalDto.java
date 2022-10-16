@@ -1,6 +1,5 @@
 package com.wezaam.withdrawal.dto;
 
-import com.wezaam.withdrawal.model.WithdrawalStatus;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -20,6 +19,6 @@ public class WithdrawalDto {
     private Long userId;
     private Long paymentMethodId;
     @Enumerated(EnumType.STRING)
-    private WithdrawalStatus status;
+    private WithdrawalStatusDto status;
     private WithdrawalTypeDto withdrawalTypeDto;
 }

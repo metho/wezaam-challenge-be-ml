@@ -1,7 +1,7 @@
 package com.wezaam.withdrawal.event;
 
+import com.wezaam.withdrawal.dto.WithdrawalStatusDto;
 import com.wezaam.withdrawal.dto.WithdrawalTypeDto;
-import com.wezaam.withdrawal.model.WithdrawalStatus;
 import lombok.Builder;
 import lombok.Getter;
 

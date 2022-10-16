@@ -1,4 +1,4 @@
-package com.wezaam.withdrawal.event;
+package com.wezaam.withdrawal.dto;
 
 public enum WithdrawalStatusDto {
 
