@@ -2,6 +2,7 @@ package com.wezaam.withdrawal.service;
 
 import com.wezaam.withdrawal.dto.WithdrawalDto;
 import com.wezaam.withdrawal.dto.WithdrawalTypeDto;
+import com.wezaam.withdrawal.exception.PaymentMethodBelongsToDifferentUserException;
 import com.wezaam.withdrawal.exception.PaymentNotFoundException;
 import com.wezaam.withdrawal.exception.TransactionException;
 import com.wezaam.withdrawal.exception.UserNotFoundException;
@@ -50,13 +51,22 @@ public class WithdrawalService {
         PaymentMethod paymentMethod = paymentMethodRepository.findById(paymentMethodId)
                 .orElseThrow(() -> new PaymentNotFoundException(paymentMethodId));
 
-        Withdrawal withdrawal = buildWithdrawal(withdrawalRequest, paymentMethodId);
+        validatePaymentMethodBelongsToTheUser(withdrawalRequest, paymentMethod);
+
+        Withdrawal withdrawal = buildWithdrawal(withdrawalRequest, paymentMethod.getId());
         if (withdrawalRequest.getWithdrawalTypeDto() == WithdrawalTypeDto.IMMEDIATE) {
             this.create(withdrawal, paymentMethod);
         } else {
             this.schedule(withdrawal);
         }
         return WithdrawalMapper.mapWithdrawal(withdrawal);
+    }
+
+    private static void validatePaymentMethodBelongsToTheUser(WithdrawalRequest withdrawalRequest, PaymentMethod paymentMethod) {
+        if (withdrawalRequest.getUserId() != paymentMethod.getUser().getId()) {
+            throw new PaymentMethodBelongsToDifferentUserException(paymentMethod.getId(), withdrawalRequest.getUserId(),
+                    paymentMethod.getUser().getId());
+        }
     }
 
     public void schedule(Withdrawal scheduledWithdrawal) {
@@ -70,17 +80,9 @@ public class WithdrawalService {
         withdrawal.setAmount(withdrawalRequest.getAmount());
         withdrawal.setCreatedAt(Instant.now());
         withdrawal.setStatus(WithdrawalStatus.PENDING);
-        withdrawal.setWithdrawalType(mapWithdrawalType(withdrawalRequest.getWithdrawalTypeDto()));
+        withdrawal.setWithdrawalType(WithdrawalMapper.mapWithdrawalTypeDto(withdrawalRequest.getWithdrawalTypeDto()));
         withdrawal.setExecuteAt(withdrawalRequest.getExecuteAt());
         return withdrawal;
-    }
-
-    private static WithdrawalType mapWithdrawalType(WithdrawalTypeDto withdrawalTypeDto) {
-        if (withdrawalTypeDto == WithdrawalTypeDto.IMMEDIATE) {
-            return WithdrawalType.IMMEDIATE;
-        } else {
-            return WithdrawalType.SCHEDULED;
-        }
     }
 
     public void create(Withdrawal withdrawal, PaymentMethod paymentMethod) {
@@ -117,8 +119,8 @@ public class WithdrawalService {
 
     @Scheduled(fixedDelay = 5000)
     public void run() {
-        withdrawalRepository.findAllByExecuteAtBeforeAndWithdrawalType(Instant.now(), WithdrawalType.SCHEDULED)
-                .forEach(this::processScheduled);
+        withdrawalRepository.findAllByExecuteAtBeforeAndWithdrawalTypeAndStatus(Instant.now(),
+                        WithdrawalType.SCHEDULED, WithdrawalStatus.PENDING).forEach(this::processScheduled);
     }
 
     private void processScheduled(Withdrawal withdrawal) {
